@@ -18,6 +18,7 @@ k = matgen(field_size)
 
 
 def field_print(field_size):
+    '''Problems with number 10 100 1000'''
     global k
     print('=' * (4 * field_size - 3))
     for i in range(field_size):
