@@ -3,6 +3,7 @@ class tic_tac_toe:
         print('Welcome to the tic_tac_toe creator')
         self.field_size = 0
         self.k = []
+        self.checker = False
 
     def matgen(self):
         ''''Matrix generation in a row: [1...n]
@@ -28,7 +29,32 @@ class tic_tac_toe:
                 print(self.k[i][j], end=' | ')
             print('=' * (4 * self.field_size - 3))
 
+    def score_check(self, xo):
+
+        for i in range(self.field_size):
+            counter_goriz = 0
+            counter_vert = 0
+            counter_diag1 = 0
+            counter_diag2 = 0
+            sec_i = self.field_size - 1
+            for j in range(self.field_size):
+                if self.k[i][j] == str(xo):
+                    counter_goriz += 1
+                if self.k[j][i] == str(xo):
+                    counter_vert += 1
+                if self.k[j][j] == str(xo):
+                    counter_diag1 += 1
+                if self.k[j][sec_i] == str(xo):
+                    counter_diag2 += 1
+                sec_i -= 1
+            if counter_goriz == self.field_size or counter_vert == self.field_size \
+                    or counter_diag1 == self.field_size \
+                    or counter_diag2 == self.field_size:
+                self.checker = True
+                return
+
     def startgame(self):
+        self.checker = False
         self.matgen()
         self.field_print()
 
@@ -45,8 +71,17 @@ class tic_tac_toe:
             if z % 2 == 0:
                 chose(self.field_size, self.k, 'X')
                 self.field_print()
+                self.score_check('X')
+                if self.checker is True:
+                    print('X wins!')
+                    break
                 z += 1
             elif z % 2 == 1:
                 chose(self.field_size, self.k, 'O')
                 self.field_print()
+                self.score_check('O')
+                if self.checker is True:
+                    print('O wins!')
+                    break
+
                 z += 1
