@@ -1,7 +1,7 @@
 class tic_tac_toe:
-    def __init__(self):
+    def __init__(self, size):
         print('Welcome to the tic_tac_toe creator')
-        self.field_size = 0
+        self.field_size = size
         self.k = []
         self.checker = False
 
@@ -9,8 +9,6 @@ class tic_tac_toe:
         ''''Matrix generation in a row: [1...n]
                                           ...
                                       [n + 1...n + n]'''
-        size = int(input('Enter size of field:'))
-        self.field_size = size
         for i in range(1, self.field_size ** 2, self.field_size):
             row = []
             for j in range(i, i + self.field_size):
@@ -50,8 +48,14 @@ class tic_tac_toe:
             if counter_goriz == self.field_size or counter_vert == self.field_size \
                     or counter_diag1 == self.field_size \
                     or counter_diag2 == self.field_size:
-                self.checker = True
-                return
+                return True
+
+    def draw(self):
+        for i in self.k:
+            for j in i:
+                if isinstance(j, int):
+                    return False
+        return True
 
     def startgame(self):
         self.checker = False
@@ -68,20 +72,22 @@ class tic_tac_toe:
 
         z = 0
         while True:
+            if self.draw():
+                print('Draw!')
+                break
             if z % 2 == 0:
                 chose(self.field_size, self.k, 'X')
                 self.field_print()
                 self.score_check('X')
-                if self.checker is True:
-                    print('X wins!')
+                if self.score_check('X'):
+                    print('X win!')
                     break
                 z += 1
             elif z % 2 == 1:
                 chose(self.field_size, self.k, 'O')
                 self.field_print()
                 self.score_check('O')
-                if self.checker is True:
-                    print('O wins!')
+                if self.score_check('O'):
+                    print('O win!')
                     break
-
                 z += 1
