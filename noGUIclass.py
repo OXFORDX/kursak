@@ -78,7 +78,6 @@ class tic_tac_toe:
             if z % 2 == 0:
                 chose(self.field_size, self.k, 'X')
                 self.field_print()
-                self.score_check('X')
                 if self.score_check('X'):
                     print('X win!')
                     break
@@ -86,7 +85,6 @@ class tic_tac_toe:
             elif z % 2 == 1:
                 chose(self.field_size, self.k, 'O')
                 self.field_print()
-                self.score_check('O')
                 if self.score_check('O'):
                     print('O win!')
                     break
