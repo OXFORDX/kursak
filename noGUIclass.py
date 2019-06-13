@@ -17,36 +17,46 @@ class tic_tac_toe:
     def end_game(self, state):
         return self.win_check(state, self.HUMAN) or self.win_check(state, self.AI)
 
+    def diagonals_check(self, arr, player):
+        for i, j in enumerate(arr[0]):
+            d1 = 0
+            d2 = 0
+            d3 = 0
+            d4 = 0
+            for k in range(4):
+                try:
+
+                    if arr[k][i + k] == player and arr[k + 1][i + k + 1] == player:
+                        d1 += 1
+                    if arr[i + k][k] == player and arr[i + k + 1][k + 1] == player:
+                        d2 += 1
+                    if arr[k][i - k] == player and arr[k + 1][i - k - 1] == player:
+                        d3 += 1
+
+                    if arr[k + 1][i - k] == player and arr[k + 2][i - k - 1] == player:
+                        d4 += 1
+
+                except IndexError:
+                    pass
+            if d1 + 1 > 3 or d2 + 1 > 3 or d3 + 1 > 3 or d4 + 1 > 3:
+                return True
+        return False
+
     def win_check(self, state, player):
         for i in range(self.field_size):
             counter_goriz = 0
             counter_vert = 0
-            counter_diag1 = 0
-            counter_diag2 = 0
-            sec_i = self.field_size - 1
             for j in range(self.field_size):
-                if state[i][j] == player and state[i][j + 1] == player:
-                    counter_goriz += 1
-                else:
-                    counter_goriz = 0
-                if state[j][i] == player and state[j + 1][i] == player:
-                    counter_vert += 1
-                else:
-                    counter_vert = 0
-                if state[j][j] == player :
-                    counter_diag1 += 1
-                else:
-                    counter_diag1 = 0
-                if state[j][sec_i] == player:
-                    counter_diag2 += 1
-                else:
-                    counter_diag2 = 0
-                sec_i -= 1
-                print(counter_goriz, counter_vert, counter_diag1, counter_diag2, '\n')
-            if counter_goriz >= self.score or counter_vert >= self.score \
-                    or counter_diag1 >= self.score \
-                    or counter_diag2 >= self.score:
+                try:
+                    if state[i][j] == player and state[i][j + 1] == player:
+                        counter_goriz += 1
+                    if state[j][i] == player and state[j + 1][i] == player:
+                        counter_vert += 1
+                except IndexError:
+                    pass
+            if counter_goriz + 1 >= self.score or counter_vert + 1 >= self.score:
                 return True
+        return self.diagonals_check(state, player)
 
     def empty_cells(self, state):
         cells = []
@@ -88,6 +98,7 @@ class tic_tac_toe:
         for cell in self.empty_cells(state):
             x, y = cell[0], cell[1]
             state[x][y] = player
+            print(state)
             score = self.minimax(state, depth - 1, -player)
             state[x][y] = 0
             score[0], score[1] = x, y
@@ -107,11 +118,9 @@ class tic_tac_toe:
             return
         print(depth)
         if depth == self.field_size ** 2:
-            print('ok')
             x = random.randint(0, self.field_size - 1)
             y = random.randint(0, self.field_size - 1)
         else:
-            print('ok')
             move = self.minimax(self.k, 3, self.AI)
             x, y = move[0], move[1]
 
@@ -136,7 +145,8 @@ class tic_tac_toe:
                 print('Draw!')
                 break
             if z % 2 == 0:
-                chose(self.field_size, self.k, self.AI)
+                x, y = self.ai_turn()
+                self.k[x][y] = self.AI
                 self.field_print()
                 if self.win_check(self.k, self.AI):
                     print('X win!', 3)
