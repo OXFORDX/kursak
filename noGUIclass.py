@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from math import sqrt
 
 
 class tic_tac_toe:
@@ -31,14 +32,19 @@ class tic_tac_toe:
                     if arr[i + k][k] == player and arr[i + k + 1][k + 1] == player:
                         d2 += 1
                     if arr[k][i - k] == player and arr[k + 1][i - k - 1] == player:
-                        d3 += 1
+                        if i - k >= 0 and i - k - 1 >= 0:
+                            d3 += 1
 
                     if arr[k + 1][i - k] == player and arr[k + 2][i - k - 1] == player:
-                        d4 += 1
+                        if i - k >=0 and i - k - 1>=0:
+                            d4 += 1
+
+
 
                 except IndexError:
                     pass
-            if d1 + 1 > 3 or d2 + 1 > 3 or d3 + 1 > 3 or d4 + 1 > 3:
+            print(d1 + 1, d2 + 1, d3 + 1, d4 + 1)
+            if d1 + 1 > self.score - 1 or d2 + 1 > self.score - 1 or d3 + 1 > self.score - 1 or d4 + 1 > self.score - 1:
                 return True
         return False
 
@@ -56,6 +62,7 @@ class tic_tac_toe:
                     pass
             if counter_goriz + 1 >= self.score or counter_vert + 1 >= self.score:
                 return True
+        print(self.diagonals_check(state, player))
         return self.diagonals_check(state, player)
 
     def empty_cells(self, state):
@@ -80,7 +87,7 @@ class tic_tac_toe:
             score = +1
         elif self.win_check(state, self.HUMAN):
             score = -1
-        else:
+        else
             score = 0
 
         return score
@@ -98,7 +105,6 @@ class tic_tac_toe:
         for cell in self.empty_cells(state):
             x, y = cell[0], cell[1]
             state[x][y] = player
-            print(state)
             score = self.minimax(state, depth - 1, -player)
             state[x][y] = 0
             score[0], score[1] = x, y
@@ -116,12 +122,11 @@ class tic_tac_toe:
         depth = len(self.empty_cells(self.k))
         if depth == 0 or self.end_game(self.k):
             return
-        print(depth)
         if depth == self.field_size ** 2:
             x = random.randint(0, self.field_size - 1)
             y = random.randint(0, self.field_size - 1)
         else:
-            move = self.minimax(self.k, 3, self.AI)
+            move = self.minimax(self.k, self.score, self.AI)
             x, y = move[0], move[1]
 
         return x, y
